@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
+const validator = require("validator");
 
 const UserSchema = new mongoose.Schema({
   name: {
@@ -8,14 +9,22 @@ const UserSchema = new mongoose.Schema({
     minlength: 3,
     maxlength: 50,
   },
+  address: {
+    required: [true, "Please provide address"],
+    street: String,
+    city: String,
+    state: String,
+  },
   email: {
     type: String,
     unique: true,
     required: [true, "Please provide email"],
-    match: [
-      /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
-      "Please provide a valid email",
-    ],
+    validate: {
+      validator: (mail) => {
+        return validator.isEmail(mail);
+      },
+      message: "Please provide a valid email",
+    },
     unique: true,
   },
   password: {
@@ -33,12 +42,6 @@ const UserSchema = new mongoose.Schema({
       },
       message: "Please provide a valid number",
     },
-  },
-  address: {
-    required: [true, "Please provide address"],
-    street: String,
-    city: String,
-    state: String,
   },
   order: {
     type: mongoose.Schema.ObjectId,
