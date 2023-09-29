@@ -10,6 +10,7 @@ const UserSchema = new mongoose.Schema({
   },
   email: {
     type: String,
+    unique: true,
     required: [true, "Please provide email"],
     match: [
       /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
@@ -39,7 +40,11 @@ const UserSchema = new mongoose.Schema({
     city: String,
     state: String,
   },
-  // order
+  order: {
+    type: mongoose.Schema.ObjectId,
+    ref: "Order",
+    required: [true, "Please provide the order ref"],
+  },
 });
 
 UserSchema.pre("save", async function () {
