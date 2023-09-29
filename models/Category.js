@@ -14,8 +14,7 @@ const CategorySchema = new mongoose.Schema({
     default: false,
   },
   subCategory: {
-    type: mongoose.Schema.ObjectId,
-    ref: "Category",
+    type: String,
   },
 });
 
