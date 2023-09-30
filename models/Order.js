@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
-const addressSchema = require("./addressSchema");
-const phoneSchema = require("./addressSchema");
+const { addressSchema, phoneSchema } = require("./addressSchema");
 
 const orderStatus = {
   pending: "pending",
