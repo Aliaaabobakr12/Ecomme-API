@@ -17,8 +17,18 @@ const langSchema = new mongoose.Schema({
 
 const ProductSchema = new mongoose.Schema(
   {
-    images: {
+    slug: {
       type: String,
+      required: true,
+      unique: true,
+    },
+    images: {
+      type: [
+        {
+          location: String,
+          key: String,
+        },
+      ],
       required: true,
     },
     category: {
