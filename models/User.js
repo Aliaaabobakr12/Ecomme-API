@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const validator = require("validator");
-const addressSchema = require("./addressSchema");
+const { addressSchema, phoneSchema } = require("./addressSchema");
 
 const UserSchema = new mongoose.Schema(
   {
@@ -33,24 +33,8 @@ const UserSchema = new mongoose.Schema(
       select: false,
     },
     phoneNumber: {
-      type: String,
+      type: phoneSchema,
       required: true,
-      validate: {
-        validator: function (n) {
-          return /^\d{11}$/.test(n);
-        },
-        message: "Please provide a valid number",
-      },
-    },
-    secondryPhone: {
-      type: String,
-      required: false,
-      validate: {
-        validator: function (n) {
-          return /^\d{11}$/.test(n);
-        },
-        message: "Please provide a valid number",
-      },
     },
     userType: {
       type: String,
