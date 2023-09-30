@@ -31,4 +31,27 @@ const addressSchema = new mongoose.Schema({
   },
 });
 
-export default addressSchema;
+const phoneSchema = new mongoose.Schema({
+  phoneNumber: {
+    type: String,
+    required: true,
+    validate: {
+      validator: function (n) {
+        return /^\d{11}$/.test(n);
+      },
+      message: "Please provide a valid number",
+    },
+  },
+  secondryPhone: {
+    type: String,
+    required: false,
+    validate: {
+      validator: function (n) {
+        return /^\d{11}$/.test(n);
+      },
+      message: "Please provide a valid number",
+    },
+  },
+});
+
+export default { addressSchema, phoneSchema };
