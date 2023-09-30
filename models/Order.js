@@ -1,6 +1,43 @@
-// user products orderdate status
-
 const mongoose = require("mongoose");
+const addressSchema = require("./addressSchema");
+const phoneSchema = require("./addressSchema");
+
+const orderStatus = {
+  pending: "pending",
+  processing: "processing",
+  delivered: "delivered",
+  canceledByClient: "canceled by client",
+  canceledByAdmin: "canceled by admin",
+};
+
+const paymentMethod = {
+  cashOnDelivery: "cash on delivery",
+};
+
+const OrderItemSchema = new mongoose.Schema(
+  {
+    product: {
+      type: mongoose.Types.ObjectId,
+      ref: "Product",
+    },
+    quantity: {
+      type: Number,
+      required: true,
+      min: [1, "The minmum quantity is one item"],
+    },
+    price: {
+      type: Number,
+      required: true,
+    },
+    total: {
+      type: Number,
+      required: true,
+    },
+  },
+  {
+    timestamps: true,
+  }
+);
 
 const OrderSchema = new mongoose.Schema(
   {
@@ -9,41 +46,37 @@ const OrderSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
-
-    products: [
-      {
-        product: {
-          type: mongoose.Schema.ObjectId,
-          ref: "Product",
-          required: true,
-        },
-        quantity: {
-          type: Number,
-          required: [true, "Please provide product quantity"],
-        },
-        price: {
-          type: Number,
-          required: true,
-        },
-        total: {
-          type: Number,
-          required: true,
-        },
-      },
-    ],
+    name: {
+      type: String,
+      required: true,
+    },
+    products: [OrderItemSchema],
+    phone: {
+      type: phoneSchema,
+      required: true,
+    },
+    address: {
+      type: addressSchema,
+      required: true,
+    },
+    orderNote: {
+      type: String,
+      required: false,
+    },
     orderdate: {
       type: Date,
       default: Date.now,
     },
     status: {
       type: String,
-      enum: ["Pending", "Shipped", "Delivered"],
+      required: true,
+      enum: Object.values(orderStatus),
       default: "Pending",
     },
     paymenyMethod: {
       type: String,
       required: true,
-      enum: ["cash on delivery", "credit"],
+      enum: Object.values(paymentMethod),
     },
   },
   { timestamps: true }
