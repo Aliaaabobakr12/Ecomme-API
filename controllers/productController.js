@@ -1,6 +1,6 @@
 const Product = require("../models/Product");
 const { StatusCodes } = require("http-status-codes");
-const NotFoundError = require("../errors/notFound");
+const NotFoundError = require("../errors/not-found");
 
 const getAllProducts = async (req, res) => {
   const products = await Product.find({});
@@ -17,7 +17,14 @@ const getProduct = async (req, res) => {
 };
 
 const createProduct = async (req, res) => {
-  const product = await Product.create(req.body);
+  const { name, description, quantity, price } = req.body;
+  const product = await Product.create({
+    name,
+    description,
+    quantity,
+    price,
+    image: req.imageSrc,
+  });
   res.status(StatusCodes.CREATED).json({ product });
 };
 

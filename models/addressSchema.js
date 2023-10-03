@@ -54,4 +54,4 @@ const phoneSchema = new mongoose.Schema({
   },
 });
 
-export default { addressSchema, phoneSchema };
+module.exports = { addressSchema, phoneSchema };

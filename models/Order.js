@@ -80,5 +80,13 @@ const OrderSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+// user - name - total price - copouns
+// copoun model - address - status - payment: visa - cash: defualt
+// order: items of user - order price
+// check the quantity
+// final price - copoun
+// invoice fun to pdf
+// visa: stripe
+// 3 emails:
 
 module.exports = mongoose.model("Order", OrderSchema);

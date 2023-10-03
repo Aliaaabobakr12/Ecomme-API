@@ -1,34 +1,44 @@
 const mongoose = require("mongoose");
 
-const langSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: [true, "Name is required"],
-    minlength: 3,
-    maxlength: 50,
-  },
-  description: {
-    type: String,
-    required: [true, "Please provide product's description"],
-    minlength: [1000, "Description shouldn't be less than 1000 charctares"],
-  },
-  info: String,
-});
+// const langSchema = new mongoose.Schema({
+//   name: {
+//     type: String,
+//     required: [true, "Name is required"],
+//     minlength: 3,
+//     maxlength: 50,
+//   },
+//   description: {
+//     type: String,
+//     required: [true, "Please provide product's description"],
+//     minlength: [1000, "Description shouldn't be less than 1000 charctares"],
+//   },
+// });
 
 const ProductSchema = new mongoose.Schema(
   {
-    slug: {
+    name: {
       type: String,
-      required: true,
-      unique: true,
+      trim: true,
+      required: [true, "Name is required"],
+      minlength: 3,
+      maxlength: 50,
     },
-    images: {
-      type: [
-        {
-          location: String,
-          key: String,
-        },
-      ],
+    description: {
+      type: String,
+      required: [true, "Please provide product's description"],
+      minlength: [1000, "Description shouldn't be less than 1000 charctares"],
+    },
+    // image: {
+    //   type: [
+    //     {
+    //       location: String,
+    //       key: String,
+    //     },
+    //   ],
+    //   required: true,
+    // },
+    image: {
+      type: String,
       required: true,
     },
     category: {
@@ -36,6 +46,10 @@ const ProductSchema = new mongoose.Schema(
       ref: "Category",
       required: [true, "Category is required"],
     },
+    // subCategory: {
+    //   type: mongoose.Schema.ObjectId,
+    //   ref: "subCategory",
+    // },
     quantity: {
       type: Number,
       required: [true, "quantity is required"],
@@ -44,23 +58,25 @@ const ProductSchema = new mongoose.Schema(
       type: Number,
       required: [true, "quantity is required"],
     },
-    addedBy: {
-      type: mongoose.Schema.ObjectId,
-      ref: "User",
-    },
-    isDeleted: {
-      type: Boolean,
-      default: false,
-    },
-    deletedAt: {
-      type: Date,
-      default: Date.now,
-      required: false,
-    },
-    en: langSchema,
-    ar: langSchema,
+    // en: langSchema,
+    // ar: langSchema,
   },
   { timestamps: true }
 );
 
 module.exports = mongoose.model("Product", ProductSchema);
+
+// name ✅
+// describtion ✅
+// category ✅
+// subcategory ✅
+// price ✅
+// images ✅
+// thumbnail
+// availableItems
+// slodItems
+// discount
+// brand
+// year
+// model
+// expireDate
