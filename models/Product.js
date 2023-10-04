@@ -26,7 +26,7 @@ const ProductSchema = new mongoose.Schema(
     description: {
       type: String,
       required: [true, "Please provide product's description"],
-      minlength: [1000, "Description shouldn't be less than 1000 charctares"],
+      minlength: [12, "Description shouldn't be less than 1000 charctares"],
     },
     // image: {
     //   type: [
@@ -41,11 +41,11 @@ const ProductSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    category: {
-      type: mongoose.Schema.ObjectId,
-      ref: "Category",
-      required: [true, "Category is required"],
-    },
+    // category: {
+    //   type: mongoose.Types.ObjectId,
+    //   ref: "Category",
+    //   required: [true, "Category is required"],
+    //},
     // subCategory: {
     //   type: mongoose.Schema.ObjectId,
     //   ref: "subCategory",
@@ -73,7 +73,7 @@ module.exports = mongoose.model("Product", ProductSchema);
 // price ✅
 // images ✅
 // thumbnail
-// availableItems
+// availableItems (quantity)✅
 // slodItems
 // discount
 // brand
