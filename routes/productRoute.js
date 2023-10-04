@@ -6,14 +6,26 @@ const {
   getProduct,
   updateProduct,
   deleteProduct,
+  uploadImage,
 } = require("../controllers/productController");
-const { uploadProductImage } = require("../controllers/uploadsController");
+const {
+  authenticateUser,
+  authorizePermission,
+} = require("../middleware/authentication");
 
 router
   .route("/")
   .get(getAllProducts)
-  .post(createProduct)
-  .post(uploadProductImage);
-router.route("/:id").get(getProduct).patch(updateProduct).delete(deleteProduct);
+  .post([authenticateUser, authorizePermission("admin")], createProduct);
+
+router
+  .route("/uploadImage")
+  .post([authenticateUser, authorizePermission("admin")], uploadImage);
+
+router
+  .route("/:id")
+  .get(getProduct)
+  .patch([authenticateUser, authorizePermission("admin")], updateProduct)
+  .delete([authenticateUser, authorizePermission("admin")], deleteProduct);
 
 module.exports = router;
