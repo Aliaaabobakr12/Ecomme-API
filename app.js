@@ -27,14 +27,14 @@ const userRouter = require("./routes/userRoute");
 const notFoundMiddleware = require("./middleware/not-found");
 const errorHandlerMiddleware = require("./middleware/error-handler");
 
-app.use(express.static("./uploads"));
+app.use(express.static("./public"));
 app.use(morgan("tiny"));
 app.use(cookieParser(process.env.JWT_SECRET));
 app.use(express.json());
 app.use(fileUpload({ useTempFiles: true }));
 
 app.use("/api/v1/auth", authRouter);
-app.use("/api/v1/product", productRouter);
+app.use("/api/v1/products", productRouter);
 app.use("/api/v1/users", userRouter);
 
 app.use(notFoundMiddleware);
