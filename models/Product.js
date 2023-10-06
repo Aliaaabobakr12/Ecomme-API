@@ -58,11 +58,26 @@ const ProductSchema = new mongoose.Schema(
       type: Number,
       required: [true, "quantity is required"],
     },
+    rating: {
+      type: Number,
+      default: 0,
+    },
+    numOfReviews: {
+      type: Number,
+      default: 0,
+    },
     // en: langSchema,
     // ar: langSchema,
   },
-  { timestamps: true }
+  { timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true } }
 );
+
+ProductSchema.virtual("reviews", {
+  ref: "Review",
+  localField: "_id",
+  foreignField: "product",
+  justOne: false,
+});
 
 module.exports = mongoose.model("Product", ProductSchema);
 
