@@ -3,21 +3,27 @@ const { addressSchema, phoneSchema } = require("./addressSchema");
 
 const orderStatus = {
   pending: "pending",
+  paid: "paid",
   processing: "processing",
   delivered: "delivered",
   canceledByClient: "canceled by client",
   canceledByAdmin: "canceled by admin",
 };
 
-const paymentMethod = {
-  cashOnDelivery: "cash on delivery",
-};
-
-const OrderItemSchema = new mongoose.Schema(
+const SingleOrderItemSchema = new mongoose.Schema(
   {
     product: {
-      type: mongoose.Types.ObjectId,
+      type: mongoose.Schema.ObjectId,
       ref: "Product",
+      required: true,
+    },
+    name: {
+      type: String,
+      required: true,
+    },
+    image: {
+      type: String,
+      required: true,
     },
     quantity: {
       type: Number,
@@ -28,10 +34,10 @@ const OrderItemSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
-    total: {
-      type: Number,
-      required: true,
-    },
+    // total: {
+    //   type: Number,
+    //   required: true,
+    // },
   },
   {
     timestamps: true,
@@ -45,19 +51,7 @@ const OrderSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
-    name: {
-      type: String,
-      required: true,
-    },
-    products: [OrderItemSchema],
-    phone: {
-      type: phoneSchema,
-      required: true,
-    },
-    address: {
-      type: addressSchema,
-      required: true,
-    },
+    orderItems: [SingleOrderItemSchema],
     orderNote: {
       type: String,
       required: false,
@@ -70,17 +64,37 @@ const OrderSchema = new mongoose.Schema(
       type: String,
       required: true,
       enum: Object.values(orderStatus),
-      default: "Pending",
+      default: "pending",
     },
     paymenyMethod: {
       type: String,
       required: true,
-      enum: Object.values(paymentMethod),
+      enum: ["Cash on delivery", "Credit card"],
+      default: "Cash on delivery",
+    },
+    shippingFee: {
+      type: Number,
+      required: true,
+    },
+    clientSecret: {
+      type: String,
+      required: true,
+    },
+    subTotal: {
+      type: Number,
+      required: true,
+    },
+    total: {
+      type: Number,
+      required: true,
+    },
+    paymentId: {
+      type: String,
     },
   },
   { timestamps: true }
 );
-// user - name - total price - copouns
+// {user} - {name} - {total price }- copouns
 // copoun model - address - status - payment: visa - cash: defualt
 // order: items of user - order price
 // check the quantity
@@ -90,3 +104,5 @@ const OrderSchema = new mongoose.Schema(
 // 3 emails:
 
 module.exports = mongoose.model("Order", OrderSchema);
+
+// tax - {shipping fee} - {subtotal} - {total} - {orderitems} - {status} - {user} - clientSecret - paymentId
