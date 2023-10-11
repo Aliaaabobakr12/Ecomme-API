@@ -105,5 +105,4 @@ module.exports = {
   getSingleOrder,
   getCurrentUserOrders,
   updateOrder,
-  deleteOrder,
 };
