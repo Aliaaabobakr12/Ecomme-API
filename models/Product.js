@@ -26,7 +26,7 @@ const ProductSchema = new mongoose.Schema(
     description: {
       type: String,
       required: [true, "Please provide product's description"],
-      minlength: [12, "Description shouldn't be less than 1000 charctares"],
+      //minlength: [1000, "Description shouldn't be less than 1000 charctares"],
     },
     // image: {
     //   type: [
@@ -58,7 +58,7 @@ const ProductSchema = new mongoose.Schema(
       type: Number,
       required: [true, "quantity is required"],
     },
-    rating: {
+    averageRating: {
       type: Number,
       default: 0,
     },
