@@ -6,6 +6,8 @@ const {
   attachCookiesToResponse,
   createTokenUser,
   sendVerificationEmail,
+  sendResetPasswordEmail,
+  createHash,
 } = require("../utils");
 const crypto = require("crypto");
 
@@ -29,7 +31,7 @@ const register = async (req, res) => {
     verificationToken,
   });
 
-  const origin = "http://localhost:3000/";
+  const origin = "http://localhost:3000";
   await sendVerificationEmail({
     name: user.name,
     email: user.email,
@@ -118,4 +120,61 @@ const logout = async (req, res) => {
   res.status(StatusCodes.OK).json("User logged out");
 };
 
-module.exports = { register, login, verifyEmail, logout };
+const forgotPassword = async (req, res) => {
+  const { email } = req.body;
+  if (!email) {
+    throw new CustomError.BadRequestError("Please provide valid email");
+  }
+
+  const user = await User.findOne({ email });
+
+  if (user) {
+    const passwordToken = crypto.randomBytes(70).toString("hex");
+    const origin = "http://localhost:3000";
+    await sendResetPasswordEmail({
+      name: user.name,
+      email: user.email,
+      token: passwordToken,
+      origin,
+    });
+    const passwordTokenExpirationDate = new Date(Date.now() + 1000 * 60 * 10);
+
+    user.passwordToken = createHash(passwordToken);
+    user.passwordTokenExpirationDate = passwordTokenExpirationDate;
+    await user.save();
+  }
+
+  res
+    .status(StatusCodes.OK)
+    .json({ msg: "Please check your email for reset password link" });
+};
+
+const resetPassword = async (req, res) => {
+  const { email, password, token } = req.body;
+  if (!email || !password || !token) {
+    throw new CustomError.BadRequestError("Please provide all values");
+  }
+
+  const user = await User.findOne({ email });
+  if (user) {
+    const currentDate = new Date();
+    if (
+      user.passwordToken === createHash(token) &&
+      user.passwordTokenExpirationDate > currentDate
+    ) {
+      user.password = password;
+      (user.passwordToken = null),
+        (user.passwordTokenExpirationDate = null),
+        await user.save();
+    }
+  }
+};
+
+module.exports = {
+  register,
+  login,
+  verifyEmail,
+  logout,
+  forgotPassword,
+  resetPassword,
+};
