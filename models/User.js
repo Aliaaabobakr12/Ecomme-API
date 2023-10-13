@@ -46,6 +46,8 @@ const UserSchema = new mongoose.Schema(
       default: false,
     },
     verified: Date,
+    passwordToken: String,
+    passwordTokenExpirationDate: Date,
     //   order: {
     //     type: mongoose.Schema.ObjectId,
     //     ref: "Order",
